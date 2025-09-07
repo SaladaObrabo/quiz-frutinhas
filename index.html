@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz Rápido</title>
+  <meta name="description" content="Quiz rápido em 3 etapas. Experiência simples e direta." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#e50914;
+      --text:#0f0f0f;
+      --muted:#777;
+      --bg:#fafafa;
+      --card:#ffffff;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,.07);
+      --focus: 0 0 0 4px rgba(229,9,20,.15), 0 0 0 1.5px var(--accent);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Montserrat', sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      display:grid; place-items:center; padding:24px;
+    }
+    .shell{max-width:900px; width:100%;}
+    header{text-align:center; margin-bottom:18px;}
+    header h1{font-weight:800; margin:0 0 6px; font-size:clamp(22px, 2.6vw, 34px);}
+    header p{margin:0; color:var(--muted); font-size:clamp(13px,1.5vw,15px)}
+
+    .card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px; overflow:hidden;}
+
+    .progress{height:12px; background:#f0f0f0; border-radius:999px; overflow:hidden; margin-bottom:20px;}
+    .progress__bar{height:100%; width:0%; background:linear-gradient(90deg, var(--accent), #ff4d57); transition:width .35s ease;}
+    .progress__label{display:flex; justify-content:space-between; margin:8px 2px 0; font-size:13px; color:var(--muted);}
+
+    .steps-viewport{position:relative; min-height:240px;}
+    .step{position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;}
+    .step.active{display:flex}
+
+    .question{font-weight:700; font-size:clamp(18px,2vw,22px); margin:4px 0 16px}
+    .choices{display:grid; gap:12px; grid-template-columns:1fr;}
+    @media (min-width:620px){.choices{grid-template-columns:repeat(3,1fr);}}
+
+    .btn{border:none; cursor:pointer; border-radius:14px; padding:14px 16px; font-weight:600; font-size:15px;
+      background:#111; color:#fff; box-shadow:0 6px 14px rgba(0,0,0,.08);}
+    .btn--light{background:#fff; color:var(--text); border:1.5px solid #e8e8e8}
+    .btn.selected{background:var(--accent); color:#fff; border-color:transparent}
+
+    .footer-hint{margin-top:16px; color:var(--muted); font-size:12px; text-align:center}
+
+    .final{text-align:center; padding:20px 6px 10px;}
+    .big-cta{display:inline-block; margin-top:14px; font-size:18px; padding:16px 28px; border-radius:16px; text-decoration:none;
+      background:var(--accent); color:#fff; font-weight:800;}
+
+    @keyframes pulseRed{0%{transform:scale(1);}50%{transform:scale(1.05);box-shadow:0 0 0 8px rgba(229,9,20,0.15);}100%{transform:scale(1);}}
+    .pulse2x{animation:pulseRed 260ms ease-in-out 0s 2;}
+
+    @keyframes slideInRight{from{transform:translateX(40px);opacity:0}to{transform:translateX(0);opacity:1}}
+    @keyframes slideOutLeft{from{transform:translateX(0);opacity:1}to{transform:translateX(-40px);opacity:0}}
+    .slide-in-right{animation:slideInRight .28s ease both;}
+    .slide-out-left{animation:slideOutLeft .28s ease both;}
+  </style>
+</head>
+<body>
+  <div class="shell" role="main">
+    <header>
+      <h1>Quiz rápido (leva menos de 30 segundos)</h1>
+      <p>Responda 3 etapas. No final, você poderá prosseguir para o site.</p>
+    </header>
+
+    <section class="card">
+      <div class="progress"><div class="progress__bar" id="progressBar"></div></div>
+      <div class="progress__label"><span id="stepLabel">Etapa 1 de 3</span><span id="percentLabel">33%</span></div>
+
+      <div class="steps-viewport" id="stepsViewport">
+        <div id="step1" class="step active">
+          <div class="question">Qual marca você prefere?</div>
+          <div class="choices">
+            <button class="btn btn--light" data-choice>IGNITE</button>
+            <button class="btn btn--light" data-choice>ELFBAR</button>
+            <button class="btn btn--light" data-choice>VAPORESSO</button>
+          </div>
+        </div>
+        <div id="step2" class="step">
+          <div class="question">Qual é a sua prioridade?</div>
+          <div class="choices">
+            <button class="btn btn--light" data-choice>Preço</button>
+            <button class="btn btn--light" data-choice>Qualidade</button>
+            <button class="btn btn--light" data-choice>Entrega rápida</button>
+          </div>
+        </div>
+        <div id="step3" class="step">
+          <div class="question">Você prefere ofertas de:</div>
+          <div class="choices">
+            <button class="btn btn--light" data-choice>Novidades</button>
+            <button class="btn btn--light" data-choice>Mais vendidos</button>
+            <button class="btn btn--light" data-choice>Descontos</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="final" class="final" hidden>
+        <h2>Pronto! Suas respostas foram registradas.</h2>
+        <p>Clique abaixo para continuar para o site oficial.</p>
+        <a class="big-cta" href="https://www.wolfshopbrasil.net" rel="noopener">Prosseguir para o site</a>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function(){
+      const steps=[...document.querySelectorAll('.step')];
+      const stepsViewport=document.getElementById('stepsViewport');
+      const finalSection=document.getElementById('final');
+      const progressBar=document.getElementById('progressBar');
+      const stepLabel=document.getElementById('stepLabel');
+      const percentLabel=document.getElementById('percentLabel');
+      const total=steps.length;
+      let current=0,isAnimating=false;
+
+      function updateUI(){
+        const stepNum=current+1;
+        const pct=Math.round(((stepNum)/total)*100);
+        progressBar.style.width=pct+'%';
+        stepLabel.textContent=`Etapa ${stepNum} de ${total}`;
+        percentLabel.textContent=pct+'%';
+      }
+
+      function slideToNext(){
+        const from=steps[current];
+        const nextIndex=current+1;
+        if(nextIndex<total){
+          const to=steps[nextIndex];
+          to.classList.add('active','slide-in-right');
+          from.classList.add('slide-out-left');
+          from.addEventListener('animationend',()=>{
+            from.classList.remove('slide-out-left','active');
+            to.classList.remove('slide-in-right');
+            current=nextIndex;
+            updateUI();
+            isAnimating=false;
+          },{once:true});
+        } else {
+          from.classList.add('slide-out-left');
+          from.addEventListener('animationend',()=>{
+            from.classList.remove('slide-out-left','active');
+            stepsViewport.style.display='none'; // esconde o container de etapas
+            document.querySelector('.progress__label').style.opacity='0.90';
+            progressBar.style.width='100%';
+            stepLabel.textContent=`Etapa ${total} de ${total}`;
+            percentLabel.textContent='100%';
+            finalSection.hidden=false;
+            isAnimating=false;
+          },{once:true});
+        }
+      }
+
+      steps.forEach(step=>{
+        step.addEventListener('click',e=>{
+          const btn=e.target.closest('[data-choice]');
+          if(!btn||isAnimating)return;
+          isAnimating=true;
+          btn.classList.add('selected','pulse2x');
+          btn.addEventListener('animationend',()=>{
+            btn.classList.remove('pulse2x');
+            setTimeout(slideToNext,60);
+          },{once:true});
+        });
+      });
+
+      updateUI();
+    })();
+  </script>
+</body>
+</html>
