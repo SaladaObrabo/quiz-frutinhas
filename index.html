@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="pt-br">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,70 +9,295 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png" />
   <style>
-    :root{
-      --accent:#e50914;
-      --text:#0f0f0f;
-      --muted:#777;
-      --bg:#fafafa;
-      --card:#ffffff;
-      --radius:18px;
-      --shadow:0 10px 30px rgba(0,0,0,.07);
-      --focus: 0 0 0 4px rgba(229,9,20,.15), 0 0 0 1.5px var(--accent);
+    :root {
+      --accent: #e50914;
+      --text: #0f0f0f;
+      --muted: #777;
+      --bg: #fafafa;
+      --card: #ffffff;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0, 0, 0, .07);
+      --focus: 0 0 0 4px rgba(229, 9, 20, .15), 0 0 0 1.5px var(--accent);
+      --container: 900px;
+      --card-max: 720px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:'Montserrat', sans-serif;
-      color:var(--text);
-      background:#f2f2f2;
-      display:grid; place-items:center;
+
+    * {
+      box-sizing: border-box
     }
-    .shell{max-width:900px; width:100%;}
-    header{text-align:center; margin-bottom:18px;}
-    header h1{font-weight:800; margin:0 0 6px; font-size:clamp(22px, 2.6vw, 34px);}
-    header p{margin:0; color:var(--muted); font-size:clamp(13px,1.5vw,15px)}
 
-    .card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px; overflow:hidden;}
+    html,
+    body {
+      height: 100%
+    }
 
-    .progress{height:12px; background:#f0f0f0; border-radius:999px; overflow:hidden; margin-bottom:20px;}
-    .progress__bar{height:100%; width:0%; background:linear-gradient(90deg, var(--accent), #ff4d57); transition:width .35s ease;}
-    .progress__label{display:flex; justify-content:space-between; margin:8px 2px 0; font-size:13px; color:var(--muted);}
+    body {
+      margin: 0;
+      font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background: var(--bg);
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      /* evita scroll horizontal quando usar 100vw */
+    }
 
-    .steps-viewport{position:relative; min-height:240px;}
-    .step{position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;}
-    .step.active{display:flex}
+    /* HEADER: faixa preta full-bleed */
+    header.header-brand {
+      width: 100vw;
+      /* ocupa toda a largura da janela */
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 0;
+      margin: 0;
+      /* encosta nas bordas */
+    }
 
-    .question{font-weight:700; font-size:clamp(18px,2vw,22px); margin:4px 0 16px}
-    .choices{display:grid; gap:12px; grid-template-columns:1fr;}
-    @media (min-width:620px){.choices{grid-template-columns:repeat(3,1fr);}}
+    .brand-logo {
+      display: block;
+      max-width: min(90vw, var(--container));
+      height: auto;
+      max-height: 90px;
+      /* ajuste se quiser maior/menor */
+    }
 
-    .btn{border:none; cursor:pointer; border-radius:14px; padding:14px 16px; font-weight:600; font-size:15px;
-      background:#111; color:#fff; box-shadow:0 6px 14px rgba(0,0,0,.08);}
-    .btn--light{background:#fff; color:var(--text); border:1.5px solid #e8e8e8}
-    .btn.selected{background:var(--accent); color:#fff; border-color:transparent}
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
-    .footer-hint{margin-top:16px; color:var(--muted); font-size:12px; text-align:center}
+    /* MAIN container central */
+    main.container {
+      flex: 1;
+      /* empurra o footer para o final */
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+    }
 
-    .final{text-align:center; padding:20px 6px 10px;}
-    .big-cta{display:inline-block; margin-top:14px; font-size:18px; padding:16px 28px; border-radius:16px; text-decoration:none;
-      background:var(--accent); color:#fff; font-weight:800;}
+    /* Card do quiz */
+    .card {
+      width: 100%;
+      max-width: var(--card-max);
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      overflow: hidden;
+    }
 
-    @keyframes pulseRed{0%{transform:scale(1);}50%{transform:scale(1.05);box-shadow:0 0 0 8px rgba(229,9,20,0.15);}100%{transform:scale(1);}}
-    .pulse2x{animation:pulseRed 260ms ease-in-out 0s 2;}
+    /* Régua */
+    .progress {
+      height: 12px;
+      background: #f0f0f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
 
-    @keyframes slideInRight{from{transform:translateX(40px);opacity:0}to{transform:translateX(0);opacity:1}}
-    @keyframes slideOutLeft{from{transform:translateX(0);opacity:1}to{transform:translateX(-40px);opacity:0}}
-    .slide-in-right{animation:slideInRight .28s ease both;}
-    .slide-out-left{animation:slideOutLeft .28s ease both;}
+    .progress__bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), #ff4d57);
+      transition: width .35s ease;
+    }
+
+    .progress__label {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 2px 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Etapas (uma por vez) */
+    .steps-viewport {
+      position: relative;
+      min-height: 240px;
+    }
+
+    .step {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .step.active {
+      display: flex
+    }
+
+    .question {
+      font-weight: 800;
+      font-size: clamp(18px, 2vw, 24px);
+      margin: 4px 0 16px;
+      line-height: 1.25
+    }
+
+    .choices {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width:620px) {
+      .choices {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-weight: 700;
+      font-size: 15px;
+      background: #111;
+      color: #fff;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
+      transition: transform .06s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px)
+    }
+
+    .btn--light {
+      background: #fff;
+      color: var(--text);
+      border: 1.5px solid #e8e8e8
+    }
+
+    .btn.selected {
+      background: var(--accent);
+      color: #fff;
+      border-color: transparent
+    }
+
+    .footer-hint {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center
+    }
+
+    /* Final */
+    .final {
+      text-align: center;
+      padding: 20px 6px 10px;
+    }
+
+    .big-cta {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 18px;
+      padding: 16px 28px;
+      border-radius: 16px;
+      text-decoration: none;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      box-shadow: 0 12px 26px rgba(229, 9, 20, .25);
+    }
+
+    /* Animações */
+    @keyframes pulseRed {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 8px rgba(229, 9, 20, 0.15);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .pulse2x {
+      animation: pulseRed 260ms ease-in-out 0s 2;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(40px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1
+      }
+    }
+
+    @keyframes slideOutLeft {
+      from {
+        transform: translateX(0);
+        opacity: 1
+      }
+
+      to {
+        transform: translateX(-40px);
+        opacity: 0
+      }
+    }
+
+    .slide-in-right {
+      animation: slideInRight .28s ease both;
+    }
+
+    .slide-out-left {
+      animation: slideOutLeft .28s ease both;
+    }
+
+    /* Footer colado no fim */
+    footer.site-footer {
+      width: 100%;
+      max-width: var(--container);
+      margin: 24px auto 0;
+      padding: 0 24px 24px;
+      color: #444;
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
+    }
   </style>
 </head>
-<body>
-  <div class="shell" role="main">
 
-    <section class="card">
-      <div class="progress"><div class="progress__bar" id="progressBar"></div></div>
+<body>
+  <!-- Header full-bleed -->
+  <header class="header-brand" aria-label="Marca">
+    <h1 class="sr-only">Quiz Rápido</h1>
+    <img src="Screenshot_11.png" alt="Wolf Shop Brasil" class="brand-logo" />
+  </header>
+
+  <!-- Conteúdo central -->
+  <main class="container" role="main">
+    <section class="card" aria-label="Quiz">
+      <div class="progress">
+        <div class="progress__bar" id="progressBar"></div>
+      </div>
       <div class="progress__label"><span id="stepLabel">Etapa 1 de 3</span><span id="percentLabel">33%</span></div>
 
       <div class="steps-viewport" id="stepsViewport">
@@ -82,7 +308,9 @@
             <button class="btn btn--light" data-choice>POD</button>
             <button class="btn btn--light" data-choice>POD IGNITE</button>
           </div>
+          <p class="footer-hint">Escolha uma opção para avançar.</p>
         </div>
+
         <div id="step2" class="step">
           <div class="question">Qual é a sua prioridade?</div>
           <div class="choices">
@@ -91,6 +319,7 @@
             <button class="btn btn--light" data-choice>Entrega rápida</button>
           </div>
         </div>
+
         <div id="step3" class="step">
           <div class="question">Você prefere ofertas de:</div>
           <div class="choices">
@@ -104,128 +333,124 @@
       <div id="final" class="final" hidden>
         <h2>Pronto! Suas respostas foram registradas.</h2>
         <p>Clique abaixo para continuar para o site oficial.</p>
-        <a class="big-cta" href="https://www.wolfshopbrasil.net" rel="noopener" target="_blank">Prosseguir para o site</a>
+        <a class="big-cta" href="https://www.wolfshopbrasil.net" rel="noopener">Prosseguir para o site</a>
       </div>
     </section>
-  </div>
+  </main>
+
+  <!-- Footer colado no fim -->
+  <footer class="site-footer" aria-label="Informações">
+    Todos os produtos anunciados são originais, enviados com nota fiscal e bem embalados para garantir a sua segurança.
+    Trabalhamos com diversas formas de pagamento, incluindo parcelamento no cartão de crédito e desconto especial de 10%
+    no PIX.
+    Entregamos para todo o Brasil com opções de frete rápido e seguro.
+    Para a Grande São Paulo, contamos com serviço de motoboy com entrega em até 3 horas.
+    Também oferecemos frete expresso com postagem no mesmo dia para pedidos confirmados até o horário limite.
+    Aproveite nossas ofertas exclusivas e garanta já seus pods saborosos e refrescantes com toda praticidade e rapidez.
+  </footer>
 
   <script>
-    (function(){
-      const steps=[...document.querySelectorAll('.step')];
-      const stepsViewport=document.getElementById('stepsViewport');
-      const finalSection=document.getElementById('final');
-      const progressBar=document.getElementById('progressBar');
-      const stepLabel=document.getElementById('stepLabel');
-      const percentLabel=document.getElementById('percentLabel');
-      const total=steps.length;
-      let current=0,isAnimating=false;
+    (function () {
+      const steps = [...document.querySelectorAll('.step')];
+      const stepsViewport = document.getElementById('stepsViewport');
+      const finalSection = document.getElementById('final');
+      const progressBar = document.getElementById('progressBar');
+      const stepLabel = document.getElementById('stepLabel');
+      const percentLabel = document.getElementById('percentLabel');
+      const total = steps.length;
+      let current = 0, isAnimating = false;
 
-      function updateUI(){
-        const stepNum=current+1;
-        const pct=Math.round(((stepNum)/total)*100);
-        progressBar.style.width=pct+'%';
-        stepLabel.textContent=`Etapa ${stepNum} de ${total}`;
-        percentLabel.textContent=pct+'%';
+      function updateUI() {
+        const stepNum = current + 1;
+        const pct = Math.round((stepNum / total) * 100);
+        progressBar.style.width = pct + '%';
+        stepLabel.textContent = `Etapa ${stepNum} de ${total}`;
+        percentLabel.textContent = pct + '%';
       }
 
-      function slideToNext(){
-        const from=steps[current];
-        const nextIndex=current+1;
-        if(nextIndex<total){
-          const to=steps[nextIndex];
-          to.classList.add('active','slide-in-right');
+      function slideToNext() {
+        const from = steps[current];
+        const nextIndex = current + 1;
+
+        if (nextIndex < total) {
+          const to = steps[nextIndex];
+          to.classList.add('active', 'slide-in-right');
           from.classList.add('slide-out-left');
-          from.addEventListener('animationend',()=>{
-            from.classList.remove('slide-out-left','active');
+          from.addEventListener('animationend', () => {
+            from.classList.remove('slide-out-left', 'active');
             to.classList.remove('slide-in-right');
-            current=nextIndex;
+            current = nextIndex;
             updateUI();
-            isAnimating=false;
-          },{once:true});
+            isAnimating = false;
+          }, { once: true });
         } else {
           from.classList.add('slide-out-left');
-          from.addEventListener('animationend',()=>{
-            from.classList.remove('slide-out-left','active');
-            stepsViewport.style.display='none'; // esconde o container de etapas
-            document.querySelector('.progress__label').style.opacity='0.90';
-            progressBar.style.width='100%';
-            stepLabel.textContent=`Etapa ${total} de ${total}`;
-            percentLabel.textContent='100%';
-            finalSection.hidden=false;
-            isAnimating=false;
-          },{once:true});
+          from.addEventListener('animationend', () => {
+            from.classList.remove('slide-out-left', 'active');
+            stepsViewport.style.display = 'none';   // esconde as etapas
+            document.querySelector('.progress__label').style.opacity = '0.85';
+            progressBar.style.width = '100%';
+            stepLabel.textContent = `Etapa ${total} de ${total}`;
+            percentLabel.textContent = '100%';
+            finalSection.hidden = false;
+            isAnimating = false;
+          }, { once: true });
         }
       }
 
-      steps.forEach(step=>{
-        step.addEventListener('click',e=>{
-          const btn=e.target.closest('[data-choice]');
-          if(!btn||isAnimating)return;
-          isAnimating=true;
-          btn.classList.add('selected','pulse2x');
-          btn.addEventListener('animationend',()=>{
+      steps.forEach(step => {
+        step.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-choice]');
+          if (!btn || isAnimating) return;
+          isAnimating = true;
+          btn.classList.add('selected', 'pulse2x');
+          btn.addEventListener('animationend', () => {
             btn.classList.remove('pulse2x');
-            setTimeout(slideToNext,60);
-          },{once:true});
+            setTimeout(slideToNext, 60);
+          }, { once: true });
         });
       });
 
       updateUI();
     })();
   </script>
-  
-<script>
-(function(){
-  // Quais chaves vamos preservar (evita _gl/_ga e sujeira)
-  var ALLOWED = new Set([
-    "utm_source","utm_medium","utm_campaign","utm_content","utm_term",
-    "utm_id","utm_source_platform","utm_creative_format","utm_marketing_tactic",
-    "gclid","gbraid","wbraid","device","adgroupid","campaignid","creative","matchtype","network","placement"
-  ]);
 
-  function pickParams(search){
-    var out = new URLSearchParams();
-    var src = new URLSearchParams((search||"").replace(/^\?/,""));
-    src.forEach(function(v,k){ if(ALLOWED.has(k) && v) out.set(k,v); });
-    return out;
-  }
-  function hasAny(qs){ let ok=false; qs.forEach(()=>ok=true); return ok; }
+  <script>
+    (function () {
+      // Parâmetros que queremos preservar
+      const KEYS = [
+        "gclid", "gbraid", "wbraid",
+        "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "utm_id"
+      ];
 
-  // 1) tenta pela URL do próprio quiz
-  var params = pickParams(location.search);
+      const src = new URL(window.location.href);
+      const carry = new URLSearchParams();
 
-  // 2) se não tiver nada, tenta pelo referrer (URL do Google Sites com a query)
-  if(!hasAny(params) && document.referrer){
-    try {
-      var ref = new URL(document.referrer);
-      params = pickParams(ref.search);
-    } catch(e){}
-  }
+      // Coleta só as chaves relevantes da URL de entrada
+      for (const k of KEYS) {
+        const v = src.searchParams.get(k);
+        if (v) carry.set(k, v);
+      }
+      if ([...carry.keys()].length === 0) return; // nada para repassar
 
-  if(hasAny(params)){
-    // 3) coloca as UTMs/GCLID na URL visível do quiz
-    var here = new URL(location.href);
-    params.forEach((v,k)=>{ if(!here.searchParams.has(k)) here.searchParams.set(k,v); });
-    history.replaceState(null, "", here.toString());
+      // Reescreve todos os <a> que apontam para o domínio final
+      const DEST_DOMAIN = "wolfshopbrasil.net";
+      document.querySelectorAll('a[href]').forEach(a => {
+        try {
+          const u = new URL(a.href, window.location.origin);
+          if (!u.hostname.endsWith(DEST_DOMAIN)) return;
 
-    // 4) garante que o CTA herde as UTMs/GCLID
-    var a = document.querySelector(".big-cta");
-    if(a){
-      try{
-        var dest = new URL(a.href);
-        params.forEach((v,k)=>{ if(!dest.searchParams.has(k)) dest.searchParams.set(k,v); });
-        a.href = dest.toString();
-      }catch(e){}
-    }
-  }
-})();
-</script>
+          // Preserva parâmetros já existentes no link de destino
+          for (const [k, v] of carry.entries()) {
+            if (!u.searchParams.has(k)) u.searchParams.set(k, v);
+          }
+          a.href = u.toString();
+        } catch (e) { }
+      });
+    })();
+  </script>
 
 
 </body>
+
 </html>
-
-
-
-
-
