@@ -173,8 +173,30 @@
       updateUI();
     })();
   </script>
+  
+  <script>
+(function(){
+  var a = document.querySelector('.big-cta');
+  if(!a) return;
+
+  // Mescla os params atuais do iframe (UTMs/gclid) na URL do botão
+  function mergeParams(destUrl, srcSearch) {
+    try {
+      var u = new URL(destUrl);
+      var src = new URLSearchParams((srcSearch || '').replace(/^\?/,''));
+      src.forEach(function(v,k){ if(!u.searchParams.has(k) && v!=="") u.searchParams.append(k,v); });
+      return u.toString();
+    } catch(e){ return destUrl; }
+  }
+
+  a.href = mergeParams(a.href, location.search);
+  // target="_top" já está certo para “sair” do iframe no Google Sites 👍
+})();
+</script>
+
 </body>
 </html>
+
 
 
 
