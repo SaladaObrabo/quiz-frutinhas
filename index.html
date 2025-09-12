@@ -174,28 +174,57 @@
     })();
   </script>
   
-  <script>
+<script>
 (function(){
-  var a = document.querySelector('.big-cta');
-  if(!a) return;
+  // Quais chaves vamos preservar (evita _gl/_ga e sujeira)
+  var ALLOWED = new Set([
+    "utm_source","utm_medium","utm_campaign","utm_content","utm_term",
+    "utm_id","utm_source_platform","utm_creative_format","utm_marketing_tactic",
+    "gclid","gbraid","wbraid","device","adgroupid","campaignid","creative","matchtype","network","placement"
+  ]);
 
-  // Mescla os params atuais do iframe (UTMs/gclid) na URL do botão
-  function mergeParams(destUrl, srcSearch) {
+  function pickParams(search){
+    var out = new URLSearchParams();
+    var src = new URLSearchParams((search||"").replace(/^\?/,""));
+    src.forEach(function(v,k){ if(ALLOWED.has(k) && v) out.set(k,v); });
+    return out;
+  }
+  function hasAny(qs){ let ok=false; qs.forEach(()=>ok=true); return ok; }
+
+  // 1) tenta pela URL do próprio quiz
+  var params = pickParams(location.search);
+
+  // 2) se não tiver nada, tenta pelo referrer (URL do Google Sites com a query)
+  if(!hasAny(params) && document.referrer){
     try {
-      var u = new URL(destUrl);
-      var src = new URLSearchParams((srcSearch || '').replace(/^\?/,''));
-      src.forEach(function(v,k){ if(!u.searchParams.has(k) && v!=="") u.searchParams.append(k,v); });
-      return u.toString();
-    } catch(e){ return destUrl; }
+      var ref = new URL(document.referrer);
+      params = pickParams(ref.search);
+    } catch(e){}
   }
 
-  a.href = mergeParams(a.href, location.search);
-  // target="_top" já está certo para “sair” do iframe no Google Sites 👍
+  if(hasAny(params)){
+    // 3) coloca as UTMs/GCLID na URL visível do quiz
+    var here = new URL(location.href);
+    params.forEach((v,k)=>{ if(!here.searchParams.has(k)) here.searchParams.set(k,v); });
+    history.replaceState(null, "", here.toString());
+
+    // 4) garante que o CTA herde as UTMs/GCLID
+    var a = document.querySelector(".big-cta");
+    if(a){
+      try{
+        var dest = new URL(a.href);
+        params.forEach((v,k)=>{ if(!dest.searchParams.has(k)) dest.searchParams.set(k,v); });
+        a.href = dest.toString();
+      }catch(e){}
+    }
+  }
 })();
 </script>
 
+
 </body>
 </html>
+
 
 
 
