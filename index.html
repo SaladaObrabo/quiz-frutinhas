@@ -418,10 +418,12 @@
   <script>
     (function () {
       // Parâmetros que queremos preservar
-      const KEYS = [
-        "gclid", "gbraid", "wbraid",
-        "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "utm_id"
-      ];
+    const KEYS = [
+      "gclid", "gbraid", "wbraid",
+      "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "utm_id",
+      "c_id"
+    ];
+
 
       const src = new URL(window.location.href);
       const carry = new URLSearchParams();
@@ -454,3 +456,4 @@
 </body>
 
 </html>
+
