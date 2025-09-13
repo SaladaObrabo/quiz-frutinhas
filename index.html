@@ -132,7 +132,12 @@
       position: relative;
       min-height: 240px;
     }
-
+    /* quando a Step 1 está ativa, aumenta altura */
+    #step1.active~.steps-viewport,
+    .steps-viewport:has(#step1.active) {
+      min-height: 385px;
+    }
+    
     .step {
       position: absolute;
       inset: 0;
@@ -304,10 +309,17 @@
         <div id="step1" class="step active">
           <div class="question">Qual marca você prefere?</div>
           <div class="choices">
-            <button class="btn btn--light" data-choice>IGNITE</button>
-            <button class="btn btn--light" data-choice>POD</button>
-            <button class="btn btn--light" data-choice>POD IGNITE</button>
+            <button class="btn btn--light" data-choice>
+              <img src="logo_marca1.png" alt="Marca 1" style="max-height:65px; max-width:100%; object-fit:contain;" />
+            </button>
+            <button class="btn btn--light" data-choice>
+              <img src="logo_marca2.png" alt="Marca 2" style="max-height:60px; max-width:100%; object-fit:contain;" />
+            </button>
+            <button class="btn btn--light" data-choice>
+              <img src="logo_marca3.png" alt="Marca 3" style="max-height:50px; max-width:100%; object-fit:contain;" />
+            </button>
           </div>
+
           <p class="footer-hint">Escolha uma opção para avançar.</p>
         </div>
 
@@ -456,4 +468,5 @@
 </body>
 
 </html>
+
 
