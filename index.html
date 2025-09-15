@@ -363,7 +363,7 @@
       </div>
 
       <div id="final" class="final" hidden>
-        <h2>Pronto! Suas respostas foram registradas.</h2>
+        <h2>Pronto! Isso nos ajudou bastante.</h2>
         <p>Clique abaixo para continuar para o site oficial.</p>
         <a id="cta" class="big-cta" href="https://www.wolfshopbrasil.net" rel="noopener">Prosseguir para o site</a>
       </div>
@@ -389,7 +389,8 @@
       const progressBar = document.getElementById('progressBar');
       const stepLabel = document.getElementById('stepLabel');
       const percentLabel = document.getElementById('percentLabel');
-      const total = steps.length;
+      // const total = steps.length;
+      const total = 2;
       let current = 0, isAnimating = false;
 
       function updateUI() {
@@ -402,7 +403,7 @@
 
       function slideToNext() {
         const from = steps[current];
-        const nextIndex = current + 1;
+        const nextIndex = current + 3;
 
         if (nextIndex < total) {
           const to = steps[nextIndex];
@@ -502,6 +503,7 @@
 </body>
 
 </html>
+
 
 
 
