@@ -288,6 +288,18 @@
       text-align: center;
     }
   </style>
+
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17497928508">
+</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-17497928508');
+</script>
+  
 </head>
 
 <body>
@@ -345,7 +357,7 @@
       <div id="final" class="final" hidden>
         <h2>Pronto! Suas respostas foram registradas.</h2>
         <p>Clique abaixo para continuar para o site oficial.</p>
-        <a class="big-cta" href="https://www.wolfshopbrasil.net" rel="noopener">Prosseguir para o site</a>
+        <a id="cta" class="big-cta" href="https://www.wolfshopbrasil.net" rel="noopener">Prosseguir para o site</a>
       </div>
     </section>
   </main>
@@ -464,9 +476,24 @@
     })();
   </script>
 
+  <!-- Evento de conversão Google Ads: Clique no botão Prosseguir -->
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    const cta = document.getElementById('cta');
+    if (!cta) return;
+
+    cta.addEventListener('click', function(){
+      gtag('event', 'conversion', {
+        'send_to': 'AW-17497928508/2l2XCKu8n5sbELzm1JdB'
+      });
+    });
+  });
+</script>
+
 
 </body>
 
 </html>
+
 
 
