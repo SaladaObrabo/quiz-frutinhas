@@ -1,513 +1,222 @@
 <!doctype html>
 <html lang="pt-br">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quiz Rápido</title>
-  <meta name="description" content="Quiz rápido em 3 etapas. Experiência simples e direta." />
+  <title>Wolf Shop Brasil — Página de Pouso</title>
+  <meta name="description" content="Página de pouso simples e rápida. Clique para prosseguir para o site oficial." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="favicon.png" />
   <style>
-    :root {
-      --accent: #e50914;
-      --text: #0f0f0f;
-      --muted: #777;
-      --bg: #fafafa;
-      --card: #ffffff;
-      --radius: 18px;
-      --shadow: 0 10px 30px rgba(0, 0, 0, .07);
-      --focus: 0 0 0 4px rgba(229, 9, 20, .15), 0 0 0 1.5px var(--accent);
-      --container: 900px;
-      --card-max: 720px;
+    :root{
+      --accent:#e50914;
+      --text:#0f0f0f;
+      --muted:#777;
+      --bg:#fafafa;
+      --card:#ffffff;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,.07);
+      --container:900px;
+      --card-max:720px;
+      --focus:0 0 0 4px rgba(229,9,20,.15), 0 0 0 1.5px var(--accent);
     }
-
-    * {
-      box-sizing: border-box
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--text);
+      background:var(--bg);
+      min-height:100svh;
+      display:flex;
+      flex-direction:column;
+      overflow-x:hidden;
     }
-
-    html,
-    body {
-      height: 100%
+    /* Header faixa preta */
+    header.header-brand{
+      width:100vw;
+      background:#000;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:12px 0;
+      margin:0;
     }
-
-    body {
-      margin: 0;
-      font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color: var(--text);
-      background: var(--bg);
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-      /* evita scroll horizontal quando usar 100vw */
+    .brand-logo{
+      display:block;
+      max-width:min(90vw,var(--container));
+      height:auto;
+      max-height:90px;
     }
-
-    /* HEADER: faixa preta full-bleed */
-    header.header-brand {
-      width: 100vw;
-      /* ocupa toda a largura da janela */
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 12px 0;
-      margin: 0;
-      /* encosta nas bordas */
+    .sr-only{
+      position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
     }
-
-    .brand-logo {
-      display: block;
-      max-width: min(90vw, var(--container));
-      height: auto;
-      max-height: 90px;
-      /* ajuste se quiser maior/menor */
+    /* Main */
+    main.container{
+      flex:1;
+      width:100%;
+      max-width:var(--container);
+      margin:0 auto;
+      padding:50px 24px 24px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
     }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+    .card{
+      width:100%;
+      max-width:var(--card-max);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:28px 22px;
+      text-align:center;
     }
-
-    /* MAIN container central */
-    main.container {
-      flex: 1;
-      /* empurra o footer para o final */
-      width: 100%;
-      max-width: var(--container);
-      margin: 0 auto;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 50px;
+    .headline{
+      font-weight:800;
+      font-size:clamp(20px,3.2vw,28px);
+      margin:0 0 10px;
+      line-height:1.2;
     }
-
-    /* Card do quiz */
-    .card {
-      width: 100%;
-      max-width: var(--card-max);
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px;
-      overflow: hidden;
+    .sub{
+      color:var(--muted);
+      font-size:14px;
+      margin:0 0 18px;
     }
-
-    /* Régua */
-    .progress {
-      height: 12px;
-      background: #f0f0f0;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-bottom: 20px;
+    .big-cta{
+      display:inline-block;
+      margin-top:10px;
+      font-size:18px;
+      padding:16px 28px;
+      border-radius:16px;
+      text-decoration:none;
+      background:var(--accent);
+      color:#fff;
+      font-weight:800;
+      box-shadow:0 12px 26px rgba(229,9,20,.25);
     }
-
-    .progress__bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent), #ff4d57);
-      transition: width .35s ease;
+    .benefits{
+      display:grid;
+      gap:10px;
+      margin:18px 0 0;
+      padding:0;
+      list-style:none;
+      color:#333;
+      font-size:13px;
     }
-
-    .progress__label {
-      display: flex;
-      justify-content: space-between;
-      margin: 8px 2px 0;
-      font-size: 12px;
-      color: var(--muted);
+    @media (min-width:640px){
+      .benefits{grid-template-columns:repeat(3,1fr)}
     }
-
-    /* Etapas (uma por vez) */
-    .steps-viewport {
-      position: relative;
-      min-height: 240px;
+    .benefit{
+      background:#fafafa;
+      border:1px solid #eee;
+      border-radius:12px;
+      padding:10px;
     }
-    /* quando a Step 1 está ativa, aumenta altura */
-    #step1.active~.steps-viewport,
-    .steps-viewport:has(#step1.active) {
-      min-height: 385px;
-    }
-    
-    .step {
-      position: absolute;
-      inset: 0;
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .step.active {
-      display: flex
-    }
-
-    .question {
-      font-weight: 800;
-      font-size: clamp(18px, 2vw, 24px);
-      margin: 4px 0 16px;
-      line-height: 1.25
-    }
-
-    .choices {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: 1fr;
-    }
-
-    @media (min-width:620px) {
-      .choices {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .btn {
-      border: none;
-      cursor: pointer;
-      border-radius: 14px;
-      padding: 14px 16px;
-      font-weight: 700;
-      font-size: 15px;
-      background: #111;
-      color: #fff;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
-      transition: transform .06s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px)
-    }
-
-    .btn--light {
-      background: #fff;
-      color: var(--text);
-      border: 1.5px solid #e8e8e8
-    }
-
-    .btn.selected {
-      background: var(--accent);
-      color: #fff;
-      border-color: transparent
-    }
-
-    .footer-hint {
-      margin-top: 16px;
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center
-    }
-
-    /* Final */
-    .final {
-      text-align: center;
-      padding: 20px 6px 10px;
-    }
-
-    .big-cta {
-      display: inline-block;
-      margin-top: 14px;
-      font-size: 18px;
-      padding: 16px 28px;
-      border-radius: 16px;
-      text-decoration: none;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 800;
-      box-shadow: 0 12px 26px rgba(229, 9, 20, .25);
-    }
-
-    /* Animações */
-    @keyframes pulseRed {
-      0% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 0 8px rgba(229, 9, 20, 0.15);
-      }
-
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    .pulse2x {
-      animation: pulseRed 260ms ease-in-out 0s 2;
-    }
-
-    @keyframes slideInRight {
-      from {
-        transform: translateX(40px);
-        opacity: 0
-      }
-
-      to {
-        transform: translateX(0);
-        opacity: 1
-      }
-    }
-
-    @keyframes slideOutLeft {
-      from {
-        transform: translateX(0);
-        opacity: 1
-      }
-
-      to {
-        transform: translateX(-40px);
-        opacity: 0
-      }
-    }
-
-    .slide-in-right {
-      animation: slideInRight .28s ease both;
-    }
-
-    .slide-out-left {
-      animation: slideOutLeft .28s ease both;
-    }
-
-    /* Footer colado no fim */
-    footer.site-footer {
-      width: 100%;
-      max-width: var(--container);
-      margin: 24px auto 0;
-      padding: 0 24px 24px;
-      color: #444;
-      font-size: 13px;
-      line-height: 1.6;
-      text-align: center;
+    /* Footer */
+    footer.site-footer{
+      width:100%;
+      max-width:var(--container);
+      margin:24px auto 0;
+      padding:0 24px 24px;
+      color:#444;
+      font-size:13px;
+      line-height:1.6;
+      text-align:center;
     }
   </style>
 
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17497928508">
-</script>
-  
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17497928508"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17497928508');
+  </script>
 
-  gtag('config', 'AW-17497928508');
-</script>
-
-  <!-- Event snippet for Visualização de página conversion page -->
-<script>
-  gtag('event', 'conversion', {'send_to': 'AW-17497928508/bbSICI_vl4sbELzm1JdB'});
-</script>
-
-  
-  
+  <!-- Conversão de visualização de página (opcional) -->
+  <script>
+    gtag('event', 'conversion', {'send_to': 'AW-17497928508/bbSICI_vl4sbELzm1JdB'});
+  </script>
 </head>
-
 <body>
-  <!-- Header full-bleed -->
+  <!-- Header -->
   <header class="header-brand" aria-label="Marca">
-    <h1 class="sr-only">Quiz Rápido</h1>
+    <h1 class="sr-only">Wolf Shop Brasil</h1>
     <img src="Screenshot_11.png" alt="Wolf Shop Brasil" class="brand-logo" />
   </header>
 
-  <!-- Conteúdo central -->
+  <!-- Conteúdo -->
   <main class="container" role="main">
-    <h1 style="font-size: 20px;">Quiz rápido (leva menos de 10 segundos)</h1>
-    <p>Responda a 1 etapa. No final, você poderá prosseguir para o site.</p>
-    <section class="card" aria-label="Quiz">
-      <div class="progress">
-        <div class="progress__bar" id="progressBar"></div>
-      </div>
-      <div class="progress__label"><span id="stepLabel">Etapa 1 de 3</span><span id="percentLabel">33%</span></div>
+    <section class="card" aria-label="Página de Pouso">
+      <h2 class="headline">Continue pelo botão!</h2>
+      <p class="sub">Clique no botão abaixo para prosseguir ao site oficial.</p>
 
-      <div class="steps-viewport" id="stepsViewport">
-        <div id="step1" class="step active">
-          <div class="question">Qual marca você prefere?</div>
-          <div class="choices">
-            <button class="btn btn--light" data-choice>
-              <img src="logo_marca1.png" alt="Marca 1" style="max-height:65px; max-width:100%; object-fit:contain;" />
-            </button>
-            <button class="btn btn--light" data-choice>
-              <img src="logo_marca2.png" alt="Marca 2" style="max-height:60px; max-width:100%; object-fit:contain;" />
-            </button>
-            <button class="btn btn--light" data-choice>
-              <img src="logo_marca3.png" alt="Marca 3" style="max-height:50px; max-width:100%; object-fit:contain;" />
-            </button>
-          </div>
+      <!-- CTA principal -->
+      <a id="cta" class="big-cta" href="https://www.wolfshopbrasil.net" rel="noopener">Prosseguir para o site</a>
 
-          <p class="footer-hint">Escolha uma opção para avançar.</p>
-        </div>
-
-        <div id="step2" class="step">
-          <div class="question">Qual é a sua prioridade?</div>
-          <div class="choices">
-            <button class="btn btn--light" data-choice>Preço</button>
-            <button class="btn btn--light" data-choice>Qualidade</button>
-            <button class="btn btn--light" data-choice>Entrega rápida</button>
-          </div>
-        </div>
-
-        <div id="step3" class="step">
-          <div class="question">Você prefere ofertas de:</div>
-          <div class="choices">
-            <button class="btn btn--light" data-choice>Novidades</button>
-            <button class="btn btn--light" data-choice>Mais vendidos</button>
-            <button class="btn btn--light" data-choice>Descontos</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="final" class="final" hidden>
-        <h2>Pronto! Isso nos ajudou bastante.</h2>
-        <p>Clique abaixo para continuar para o site oficial.</p>
-        <a id="cta" class="big-cta" href="https://www.wolfshopbrasil.net" rel="noopener">Prosseguir para o site</a>
-      </div>
+      <!-- Vantagens rápidas (opcional, mantém a estética cheia) -->
+      <ul class="benefits" aria-label="Diferenciais">
+        <li class="benefit">10% OFF no PIX</li>
+        <li class="benefit">Entrega rápida para todo o Brasil</li>
+        <li class="benefit">Produtos originais</li>
+      </ul>
     </section>
   </main>
 
-  <!-- Footer colado no fim -->
+  <!-- Rodapé -->
   <footer class="site-footer" aria-label="Informações">
     Todos os produtos anunciados são originais, enviados com nota fiscal e bem embalados para garantir a sua segurança.
     Trabalhamos com diversas formas de pagamento, incluindo parcelamento no cartão de crédito e desconto especial de 10%
-    no PIX.
-    Entregamos para todo o Brasil com opções de frete rápido e seguro.
-    Para a Grande São Paulo, contamos com serviço de motoboy com entrega em até 3 horas.
-    Também oferecemos frete expresso com postagem no mesmo dia para pedidos confirmados até o horário limite.
-    Aproveite nossas ofertas exclusivas e garanta já seus pods saborosos e refrescantes com toda praticidade e rapidez.
+    no PIX. Entregamos para todo o Brasil com opções de frete rápido e seguro. Para a Grande São Paulo, contamos com
+    serviço de motoboy com entrega em até 3 horas. Também oferecemos frete expresso com postagem no mesmo dia para
+    pedidos confirmados até o horário limite. Aproveite nossas ofertas exclusivas e garanta já seus pods com praticidade
+    e rapidez.
   </footer>
 
+  <!-- Preservar parâmetros da URL (gclid/utm/etc.) nos links para wolfshopbrasil.net -->
   <script>
     (function () {
-      const steps = [...document.querySelectorAll('.step')];
-      const stepsViewport = document.getElementById('stepsViewport');
-      const finalSection = document.getElementById('final');
-      const progressBar = document.getElementById('progressBar');
-      const stepLabel = document.getElementById('stepLabel');
-      const percentLabel = document.getElementById('percentLabel');
-      // const total = steps.length;
-      const total = 2;
-      let current = 0, isAnimating = false;
-
-      function updateUI() {
-        const stepNum = current + 1;
-        const pct = Math.round((stepNum / total) * 100);
-        progressBar.style.width = pct + '%';
-        stepLabel.textContent = `Etapa ${stepNum} de ${total}`;
-        percentLabel.textContent = pct + '%';
-      }
-
-      function slideToNext() {
-        const from = steps[current];
-        const nextIndex = current + 3;
-
-        if (nextIndex < total) {
-          const to = steps[nextIndex];
-          to.classList.add('active', 'slide-in-right');
-          from.classList.add('slide-out-left');
-          from.addEventListener('animationend', () => {
-            from.classList.remove('slide-out-left', 'active');
-            to.classList.remove('slide-in-right');
-            current = nextIndex;
-            updateUI();
-            isAnimating = false;
-          }, { once: true });
-        } else {
-          from.classList.add('slide-out-left');
-          from.addEventListener('animationend', () => {
-            from.classList.remove('slide-out-left', 'active');
-            stepsViewport.style.display = 'none';   // esconde as etapas
-            document.querySelector('.progress__label').style.opacity = '0.85';
-            progressBar.style.width = '100%';
-            stepLabel.textContent = `Etapa ${total} de ${total}`;
-            percentLabel.textContent = '100%';
-            finalSection.hidden = false;
-            isAnimating = false;
-          }, { once: true });
-        }
-      }
-
-      steps.forEach(step => {
-        step.addEventListener('click', (e) => {
-          const btn = e.target.closest('[data-choice]');
-          if (!btn || isAnimating) return;
-          isAnimating = true;
-          btn.classList.add('selected', 'pulse2x');
-          btn.addEventListener('animationend', () => {
-            btn.classList.remove('pulse2x');
-            setTimeout(slideToNext, 60);
-          }, { once: true });
-        });
-      });
-
-      updateUI();
-    })();
-  </script>
-
-  <script>
-    (function () {
-      // Parâmetros que queremos preservar
-    const KEYS = [
-      "gclid", "gbraid", "wbraid",
-      "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "utm_id",
-      "c_id"
-    ];
-
-
+      const KEYS = [
+        "gclid","gbraid","wbraid",
+        "utm_source","utm_medium","utm_campaign","utm_content","utm_term","utm_id",
+        "c_id"
+      ];
       const src = new URL(window.location.href);
       const carry = new URLSearchParams();
-
-      // Coleta só as chaves relevantes da URL de entrada
       for (const k of KEYS) {
         const v = src.searchParams.get(k);
         if (v) carry.set(k, v);
       }
-      if ([...carry.keys()].length === 0) return; // nada para repassar
+      if ([...carry.keys()].length === 0) return;
 
-      // Reescreve todos os <a> que apontam para o domínio final
       const DEST_DOMAIN = "wolfshopbrasil.net";
       document.querySelectorAll('a[href]').forEach(a => {
         try {
-          const u = new URL(a.href, window.location.origin);
+          const u = new URL(a.getAttribute('href'), window.location.origin);
           if (!u.hostname.endsWith(DEST_DOMAIN)) return;
-
-          // Preserva parâmetros já existentes no link de destino
           for (const [k, v] of carry.entries()) {
             if (!u.searchParams.has(k)) u.searchParams.set(k, v);
           }
           a.href = u.toString();
-        } catch (e) { }
+        } catch (e) {}
       });
     })();
   </script>
 
-  <!-- Evento de conversão Google Ads: Clique no botão Prosseguir -->
-<script>
-  document.addEventListener('DOMContentLoaded', function(){
-    const cta = document.getElementById('cta');
-    if (!cta) return;
-
-    cta.addEventListener('click', function(){
-      gtag('event', 'conversion', {
-        'send_to': 'AW-17497928508/2l2XCKu8n5sbELzm1JdB'
+  <!-- Conversão no clique do CTA -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      const cta = document.getElementById('cta');
+      if (!cta) return;
+      cta.addEventListener('click', function(){
+        gtag('event', 'conversion', {
+          'send_to': 'AW-17497928508/2l2XCKu8n5sbELzm1JdB'
+        });
       });
     });
-  });
-</script>
-
-
+  </script>
 </body>
-
 </html>
-
-
-
-
-
-
